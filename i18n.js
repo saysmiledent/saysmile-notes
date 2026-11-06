@@ -1,0 +1,78 @@
+// UI strings: Russian (default) and English. Content typed/written by users is never translated.
+const ru = {
+  actions: 'Действия', activity: 'Активность', addPage: 'Добавить страницу', allPages: 'все страницы',
+  authorColors: 'Цвета авторов на листе', authors: 'Авторы',
+  authorsHint: 'Нажмите на автора — его записи подсветятся, остальные станут бледными. Нажмите на запись в ленте, чтобы подсветить её штрихи.',
+  back: 'Назад', backToCurrent: 'К текущей версии', cancel: 'Отмена', checkEmail: 'Проверьте почту — мы отправили ссылку для подтверждения.', close: 'Закрыть',
+  confirmDeleteForever: 'Удалить навсегда вместе с содержимым?', confirmDeletePage: 'Удалить страницу вместе со всеми записями?', confirmDeleteTpl: 'Удалить шаблон из библиотеки?',
+  currentPage: 'текущая страница', delete: 'Удалить', deleteForever: 'Удалить навсегда', deletePage: 'Удалить страницу',
+  demoBanner: 'Демо-режим: данные хранятся только на этом устройстве. Чтобы работать вместе с коллегами, подключите Supabase (см. README).',
+  demoMode: 'Демо', demoNoInvite: 'В демо-режиме приглашения не отправляются.', demoUser: 'Демо-пользователь',
+  dentalPlan: 'План лечения', dentalStatus: 'Статус / диагноз', dentalTitle: 'Зубная формула', done: 'Готово', edit: 'Править', email: 'Эл. почта',
+  emptyLib: 'Пока пусто. Создайте папку или заметку.', erased: 'стёр(ла)', error: 'Ошибка', export: 'Экспорт', exporting: 'Готовим файл…',
+  fBirth: 'Дата рождения', fDate: 'Дата приёма', fDoctor: 'Врач', fPatient: 'Пациент', fPhone: 'Телефон',
+  fingerDraw: 'Рисовать пальцем', fingerDrawHint: 'Включите, если нет Apple Pencil. Иначе палец прокручивает страницу.', fit: 'По ширине', fitToggle: 'Заполнить / вместить',
+  gamAdvice: 'Рекомендации', gamComplaint: 'С чем вы обратились', gamFindings: 'Что мы увидели', gamPlan: 'План лечения', gamTag: 'Семейная стоматология', gamTitle: 'Индивидуальный план лечения',
+  haveAccount: 'Уже есть аккаунт? Войти', home: 'Главная', hrAgo: n => `${n} ч назад`,
+  invAdded: 'Участник добавлен', invPending: 'Приглашение сохранено: доступ появится после регистрации по этой почте.', invite: 'Пригласить', inviteEmail: 'Эл. почта коллеги',
+  justNow: 'только что', language: 'Язык', leftSide: 'левая сторона', loadError: 'Не удалось загрузить', loading: 'Загрузка…', localMode: 'локальный режим', menu: 'Меню',
+  minAgo: n => `${n} мин назад`, moveToTrash: 'В корзину', myTemplates: 'Мои шаблоны', newFolder: 'Новая папка', newNote: 'Новая заметка',
+  noAccess: 'Нет доступа к этой заметке', noAccount: 'Нет аккаунта? Зарегистрироваться', noPages: 'В заметке пока нет страниц.', noResults: 'Ничего не найдено', offline: 'нет связи', ok: 'ОК',
+  onlyAdminInvites: 'Приглашать участников может только администратор.', pageOf: (i, n) => `Страница ${i} из ${n}`, password: 'Пароль', pending: 'ожидает регистрации',
+  photoAdded: 'Фото добавлено', photoN: n => `Фото ${n}`, pickFirst: 'Выберите шаблон первой страницы', raDesc: 'всё + участники', reDesc: 'пишет и стирает',
+  rejected: 'Часть изменений отклонена сервером (нет прав)', remove: 'Убрать', rename: 'Переименовать', replacePhoto: 'Заменить фото', restore: 'Восстановить', rightSide: 'правая сторона',
+  roleAdmin: 'Администратор', roleEditor: 'Редактор', roleViewer: 'Просмотр', rvDesc: 'только читает', saveToLibrary: 'Сохранить в «Мои шаблоны»', saved: 'сохранено', search: 'Поиск по названию',
+  share: 'Доступ', shareHint: 'Доступ к папке распространяется на все вложенные заметки.', shareTitle: n => `Доступ: ${n}`, showAll: 'Показать всё',
+  signIn: 'Войти', signOut: 'Выйти', signUp: 'Регистрация', size: 'Толщина', templateName: 'Название шаблона', title: 'Название', titlePh: 'Название', tooBig: 'Файл слишком большой (макс. 400 КБ)',
+  toolEraser: 'Ластик', toolHl: 'Маркер', toolPen: 'Ручка', toolPhoto: 'Фото', toolSelect: 'Выбор / ввод в поля', toolText: 'Текст', trash: 'Корзина', trashEmpty: 'Корзина пуста',
+  undo: 'Отменить', redo: 'Повторить', untitled: 'Без названия',
+  uploadHint: 'В HTML можно отметить поля: data-field="имя" и места для фото: data-photo="1".', uploadHtml: 'Загрузить свой HTML-шаблон', uploading: 'Загружаем фото…',
+  viewOnly: 'Только просмотр', viewVersion: 'Показать заметку на этот момент', viewingVersion: tm => `Версия на ${tm}`, wrote: 'написал(а)', yourName: 'Ваше имя',
+  zoomIn: 'Увеличить', zoomOut: 'Уменьшить',
+  tplBlank: 'Чистый лист', tplBlankDesc: 'Белая страница для рукописных заметок',
+  tplDental: 'Зубная формула', tplDentalDesc: 'Схема зубов FDI 18–48, статус и план',
+  tplGam: 'План лечения GAM', tplGamDesc: 'Бланк клиники: поля, 4 места для фото, рамки для записей',
+};
+const en = {
+  actions: 'Actions', activity: 'Activity', addPage: 'Add page', allPages: 'all pages',
+  authorColors: 'Show author colors on the page', authors: 'Authors',
+  authorsHint: 'Tap an author to highlight their writing and fade the rest. Tap an activity entry to highlight those strokes.',
+  back: 'Back', backToCurrent: 'Back to current', cancel: 'Cancel', checkEmail: 'Check your inbox — we sent a confirmation link.', close: 'Close',
+  confirmDeleteForever: 'Delete forever, including its contents?', confirmDeletePage: 'Delete this page with everything written on it?', confirmDeleteTpl: 'Remove this template from your library?',
+  currentPage: 'current page', delete: 'Delete', deleteForever: 'Delete forever', deletePage: 'Delete page',
+  demoBanner: 'Demo mode: data stays on this device only. To work with colleagues, connect Supabase (see README).',
+  demoMode: 'Demo', demoNoInvite: 'Invitations are not sent in demo mode.', demoUser: 'Demo user',
+  dentalPlan: 'Treatment plan', dentalStatus: 'Status / diagnosis', dentalTitle: 'Dental chart', done: 'Done', edit: 'Edit', email: 'Email',
+  emptyLib: 'Nothing here yet. Create a folder or a note.', erased: 'erased', error: 'Error', export: 'Export', exporting: 'Preparing file…',
+  fBirth: 'Date of birth', fDate: 'Visit date', fDoctor: 'Doctor', fPatient: 'Patient', fPhone: 'Phone',
+  fingerDraw: 'Draw with finger', fingerDrawHint: 'Turn on if you have no Apple Pencil. Otherwise a finger scrolls the page.', fit: 'Fit width', fitToggle: 'Fill / fit',
+  gamAdvice: 'Recommendations', gamComplaint: 'Chief complaint', gamFindings: 'Findings', gamPlan: 'Treatment plan', gamTag: 'Family dentistry', gamTitle: 'Individual treatment plan',
+  haveAccount: 'Have an account? Sign in', home: 'Home', hrAgo: n => `${n} h ago`,
+  invAdded: 'Member added', invPending: 'Invitation saved: access appears once this email signs up.', invite: 'Invite', inviteEmail: "Colleague's email",
+  justNow: 'just now', language: 'Language', leftSide: 'left side', loadError: 'Could not load', loading: 'Loading…', localMode: 'local mode', menu: 'Menu',
+  minAgo: n => `${n} min ago`, moveToTrash: 'Move to trash', myTemplates: 'My templates', newFolder: 'New folder', newNote: 'New note',
+  noAccess: 'No access to this note', noAccount: 'No account? Sign up', noPages: 'This note has no pages yet.', noResults: 'Nothing found', offline: 'offline', ok: 'OK',
+  onlyAdminInvites: 'Only an admin can invite people.', pageOf: (i, n) => `Page ${i} of ${n}`, password: 'Password', pending: 'waiting to sign up',
+  photoAdded: 'Photo added', photoN: n => `Photo ${n}`, pickFirst: 'Choose a template for the first page', raDesc: 'everything + members', reDesc: 'writes and erases',
+  rejected: 'Some changes were rejected by the server (no permission)', remove: 'Remove', rename: 'Rename', replacePhoto: 'Replace photo', restore: 'Restore', rightSide: 'right side',
+  roleAdmin: 'Admin', roleEditor: 'Editor', roleViewer: 'Viewer', rvDesc: 'read only', saveToLibrary: 'Save to “My templates”', saved: 'saved', search: 'Search by title',
+  share: 'Sharing', shareHint: "Access to a folder applies to every note inside it.", shareTitle: n => `Sharing: ${n}`, showAll: 'Show all',
+  signIn: 'Sign in', signOut: 'Sign out', signUp: 'Sign up', size: 'Thickness', templateName: 'Template name', title: 'Title', titlePh: 'Title', tooBig: 'File too large (max 400 KB)',
+  toolEraser: 'Eraser', toolHl: 'Highlighter', toolPen: 'Pen', toolPhoto: 'Photo', toolSelect: 'Select / type in fields', toolText: 'Text', trash: 'Trash', trashEmpty: 'Trash is empty',
+  undo: 'Undo', redo: 'Redo', untitled: 'Untitled',
+  uploadHint: 'In your HTML mark fields with data-field="name" and photo spots with data-photo="1".', uploadHtml: 'Upload my HTML template', uploading: 'Uploading photo…',
+  viewOnly: 'View only', viewVersion: 'View the note as of this moment', viewingVersion: tm => `Version from ${tm}`, wrote: 'wrote', yourName: 'Your name',
+  zoomIn: 'Zoom in', zoomOut: 'Zoom out',
+  tplBlank: 'Blank page', tplBlankDesc: 'White page for handwritten notes',
+  tplDental: 'Dental chart', tplDentalDesc: 'FDI chart 18–48, status and plan boxes',
+  tplGam: 'GAM treatment plan', tplGamDesc: 'Clinic form: fields, 4 photo spots, writing boxes',
+};
+const DICT = { ru, en };
+let lang = 'ru';
+try { lang = localStorage.getItem('lang') || 'ru'; } catch (_) {}
+export const getLang = () => lang;
+export function setLang(l) { lang = DICT[l] ? l : 'ru'; try { localStorage.setItem('lang', lang); } catch (_) {} }
+export function t(key, ...args) {
+  const v = (DICT[lang] && DICT[lang][key]) ?? en[key] ?? key;
+  return typeof v === 'function' ? v(...args) : v;
+}

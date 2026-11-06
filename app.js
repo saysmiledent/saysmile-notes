@@ -286,7 +286,7 @@ function buildBar() {
       ib('users', t('share'), () => showShare(S.note)), ib('history', t('authors'), () => { S.drawer = !S.drawer; renderDrawer(); }, 'drawerbtn'), ib('download', t('export'), showExport)),
     h('div', { class: 'row r2', id: 'toolrow' },
       canWrite() || S.role >= 2 ? [
-        h('div', { class: 'seg' }, tools.map(([n, ic, label]) => h('button', { class: 'ib tool', 'data-tool': n, title: label, 'aria-label': label, onclick: () => setTool(n), html: icon(ic) }))),
+        h('div', { class: 'seg' }, tools.map(([n, ic, label]) => h('button', { class: 'ib tool', 'data-tool': n, title: label, 'aria-label': label, onpointerdown: e => { if (e.pointerType !== 'mouse') setTool(n); }, onclick: () => setTool(n), html: icon(ic) }))),
         h('div', { class: 'seg', id: 'colors' }), h('div', { class: 'seg' }, h('button', { class: 'ib', id: 'sizebtn', title: t('size'), onclick: cycleSize }), h('button', { class: 'ib', id: 'photobtn', title: t('toolPhoto'), onclick: () => pickPhoto(null), html: icon('image') })),
         h('div', { class: 'seg' }, h('button', { class: 'ib', id: 'undobtn', title: t('undo'), onclick: undo, html: icon('undo') }), h('button', { class: 'ib', id: 'redobtn', title: t('redo'), onclick: redo, html: icon('redo') })),
       ] : h('span', { class: 'pill warn' }, t('viewOnly')),

@@ -17,7 +17,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn.small{padding:5px 10px;min-height:34px;font-size:13px} .btn.wide{width:100%;justify-content:center}
 .btn:disabled,.ib:disabled{opacity:.4;pointer-events:none}
 .ib{display:inline-grid;place-items:center;width:40px;height:40px;border:0;background:transparent;border-radius:10px;color:var(--ink);padding:0;flex:none}
-.ib:hover{background:var(--brand-s)} .ib.on,.ib.tool.on{background:var(--brand);color:#fff}
+.ib.on,.ib.tool.on{background:var(--brand);color:#fff}
 .ib.plain{width:36px;height:36px} .ib.small{width:32px;height:32px} .ib.danger{color:var(--danger)}
 .inp,.sel{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font:inherit;min-height:42px;color:var(--ink)}
 .inp:focus,.sel:focus{outline:2px solid var(--brand);outline-offset:-1px}
@@ -37,7 +37,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .mh{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px 18px;gap:8px} .mh b{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mb{padding:4px 18px 14px;overflow:auto} .mf{display:flex;justify-content:flex-end;gap:8px;padding:10px 18px 16px}
 .menu{display:flex;flex-direction:column;gap:2px}
-.mrow{display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 8px;border-radius:10px;text-align:left} .mrow:hover{background:var(--brand-s)} .mrow.danger{color:var(--danger)}
+.mrow{display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 8px;border-radius:10px;text-align:left} .mrow.danger{color:var(--danger)}
 .who{padding:6px 8px 10px;display:flex;flex-direction:column} .who small,.ver{color:var(--muted)} .ver{margin-top:10px;text-align:center}
 .lrow{display:flex;align-items:center;gap:10px;padding:8px;flex-wrap:wrap} .lrow .langs{margin-left:auto;display:flex;gap:6px}
 .langs{display:flex;gap:6px;justify-content:center}
@@ -56,7 +56,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .crumbs{display:flex;align-items:center;gap:4px;flex-wrap:wrap} .crumb{border:0;background:none;color:var(--brand);font-weight:700;padding:4px;font-size:16px} .sep{color:var(--muted)}
 .lbar .acts{display:flex;gap:8px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r);padding:12px 8px 12px 14px;border:1px solid var(--line);cursor:pointer;min-height:68px} .card:hover{border-color:var(--brand)} .card.dim{opacity:.6;cursor:default}
+.card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r);padding:12px 8px 12px 14px;border:1px solid var(--line);cursor:pointer;min-height:68px} .card.dim{opacity:.6;cursor:default}
 .ci{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--brand-s);color:var(--brand);flex:none} .ci.note{background:#eef0fb;color:#3a4fb5}
 .ct{flex:1;min-width:0;display:flex;flex-direction:column} .ct b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .ct small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .empty{display:grid;place-items:center;text-align:center;color:var(--muted);padding:60px 20px;gap:6px}
@@ -65,7 +65,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .mem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)} .mem .mt{flex:1;min-width:0;display:flex;flex-direction:column} .mem small{color:var(--muted);overflow:hidden;text-overflow:ellipsis}
 .invite{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap} .invite .inp{flex:1;min-width:180px} .rolehelp{margin-top:12px;color:var(--muted)}
 .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:6px 0 14px}
-.tcard{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px;position:relative} .tcard:hover{border-color:var(--brand)} .tcard small{color:var(--muted)}
+.tcard{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px;position:relative} .tcard small{color:var(--muted)}
 .tcard.mine{padding:0} .tcard.mine .tmain{border:0;background:none;text-align:left;padding:10px;display:flex;flex-direction:column;gap:4px} .tcard.mine .ib{position:absolute;right:4px;top:4px;background:#fff}
 .thumb{height:130px;border-radius:8px;border:1px solid var(--line);background:#fff;position:relative;overflow:hidden}
 .t-dental{background:linear-gradient(#fff 0 0) padding-box,repeating-linear-gradient(90deg,#fff 0 5px,#c9d6d5 5px 6px)}
@@ -173,3 +173,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 @keyframes spUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes spPen{0%{transform:translate(26px,62px) rotate(40deg)}35%{transform:translate(60px,112px) rotate(40deg)}70%{transform:translate(160px,112px) rotate(40deg)}100%{transform:translate(194px,62px) rotate(40deg)}}
 @media (prefers-reduced-motion:reduce){.splash *{animation-duration:.01s!important;animation-delay:0s!important}}
+
+/* hover only on real pointers: on iOS a :hover rule makes the first tap act as hover and needs a second tap */
+@media (hover:hover){.ib:hover{background:var(--brand-s)} .ib.on:hover,.ib.tool.on:hover{background:var(--brand)} .mrow:hover{background:var(--brand-s)} .card:hover{border-color:var(--brand)} .tcard:hover{border-color:var(--brand)}}
+.ib,.btn,.chip,.cdot{touch-action:manipulation;-webkit-tap-highlight-color:transparent}

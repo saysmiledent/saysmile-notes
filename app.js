@@ -1,5 +1,6 @@
 // SaySmile Notes — application shell: auth, library (folders/notes), note editor, sharing, authors/history, export.
 import { PAGE_W, PAGE_H, PageInk, Gestures, drawStrokeObj } from './ink.js';
+import { showSplash, CREATOR } from './splash.js';
 import { BUILTINS, mountTemplate, fitCustom, setFieldValues, slotRect, slotIds } from './templates.js';
 import { localStore, cloudStore, downscaleImage } from './store.js';
 import { t, getLang, setLang } from './i18n.js';
@@ -43,6 +44,7 @@ async function boot() {
 async function route() {
   cleanupNote();
   if (!S.user && store.mode === 'cloud') return viewAuth();
+  if (S.user) { let seen = false; try { seen = sessionStorage.getItem('ss.splash') === '1'; sessionStorage.setItem('ss.splash', '1'); } catch (_) {} if (!seen) showSplash({ welcome: S.justSignedUp }); S.justSignedUp = null; }
   const m = location.hash.match(/^#\/(n|f)\/([\w-]+)/);
   if (m && m[1] === 'n') return viewNote(m[2]);
   S.folderId = m ? m[2] : null;
@@ -63,6 +65,7 @@ function viewAuth(mode = 'in') {
     try {
       if (mode === 'in') await store.signIn(email.value.trim(), pass.value);
       else { const r = await store.signUp(email.value.trim(), pass.value, name.value.trim()); if (r && r.needsConfirm) { msg.textContent = t('checkEmail'); msg.className = 'msg ok'; return; } }
+      if (mode === 'up') S.justSignedUp = name.value.trim() || email.value.split('@')[0];
       S.user = store.user; route();
     } catch (e) { msg.textContent = (e && e.message) || String(e); }
   };
@@ -72,7 +75,8 @@ function viewAuth(mode = 'in') {
     mode === 'up' ? name : null, email, pass, msg,
     h('button', { class: 'btn primary wide', onclick: submit }, mode === 'in' ? t('signIn') : t('signUp')),
     h('button', { class: 'link', onclick: () => viewAuth(mode === 'in' ? 'up' : 'in') }, mode === 'in' ? t('noAccount') : t('haveAccount')),
-    h('div', { class: 'langs' }, langButtons(() => viewAuth(mode))))));
+    h('div', { class: 'langs' }, langButtons(() => viewAuth(mode))),
+    h('div', { class: 'credit' }, (getLang() === 'ru' ? 'Создал ' : 'Made by ') + CREATOR + ' 🦷'))));
 }
 function langButtons(after) {
   return ['ru', 'en'].map(l => h('button', { class: 'chip' + (getLang() === l ? ' on' : ''), onclick: () => { setLang(l); document.documentElement.lang = l; after(); } }, l.toUpperCase()));

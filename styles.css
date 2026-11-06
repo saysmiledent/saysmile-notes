@@ -157,3 +157,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tpl-dental .gap{display:flex;justify-content:space-between;font-size:10px;color:#7a908d;margin:6px 0;text-transform:uppercase;letter-spacing:.1em;border-top:1px dashed #c3d3d1;border-bottom:1px dashed #c3d3d1;padding:2px 4px}
 .tpl-dental .bx{flex:1;margin:0;min-height:200px} .tpl-dental .bx h4{background:#0f766e}
 @page{size:A4;margin:0}
+
+.credit{text-align:center;font-size:12px;color:var(--muted);margin-top:4px}
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:linear-gradient(135deg,#14b8a6,#0b5f59);color:#fff;transition:opacity .4s;touch-action:manipulation}
+.splash.out{opacity:0;pointer-events:none}
+.sp-in{text-align:center;padding:24px;max-width:420px}
+.sp-title{font-size:28px;letter-spacing:-.02em;margin-top:6px;animation:spUp .6s .5s both} .sp-title b{font-weight:800}
+.sp-line{margin-top:10px;font-size:16px;opacity:.95;animation:spUp .6s .9s both}
+.sp-by{margin-top:26px;font-size:13px;opacity:.85;animation:spUp .6s 1.3s both}
+.sp-smile{stroke-dasharray:1;stroke-dashoffset:1;animation:spDraw 1.1s .2s ease-out forwards}
+.sp-eye{transform-box:fill-box;transform-origin:center;animation:spPop .4s .1s both} .sp-eye.e2{animation-delay:.25s}
+.sp-pencil{transform:translate(26px,62px) rotate(40deg);animation:spPen 1.1s .2s ease-out forwards}
+@keyframes spDraw{to{stroke-dashoffset:0}}
+@keyframes spPop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes spUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes spPen{0%{transform:translate(26px,62px) rotate(40deg)}35%{transform:translate(60px,112px) rotate(40deg)}70%{transform:translate(160px,112px) rotate(40deg)}100%{transform:translate(194px,62px) rotate(40deg)}}
+@media (prefers-reduced-motion:reduce){.splash *{animation-duration:.01s!important;animation-delay:0s!important}}

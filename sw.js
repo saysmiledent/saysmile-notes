@@ -1,6 +1,6 @@
 // Offline shell: cache-first for app files, always network for Supabase.
-const V = 'saysmile-v3';
-const FILES = ['./', 'index.html', 'styles.css', 'app.js', 'ink.js', 'store.js', 'templates.js', 'ui.js', 'i18n.js', 'config.js', 'manifest.webmanifest',
+const V = 'saysmile-v4';
+const FILES = ['./', 'index.html', 'styles.css', 'app.js', 'ink.js', 'splash.js', 'store.js', 'templates.js', 'ui.js', 'i18n.js', 'config.js', 'manifest.webmanifest',
   'vendor/supabase.js', 'vendor/html2canvas.min.js', 'vendor/jspdf.umd.min.js', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

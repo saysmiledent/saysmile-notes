@@ -1,0 +1,15 @@
+# Pings the Supabase project every 3 days so the free tier never auto-pauses (it pauses after 7 days without activity).
+name: keepalive
+on:
+  schedule: [{ cron: '17 6 */3 * *' }]
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Touch the database through the public API
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "apikey: ${{ vars.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jb3F1Ym1xYXJnY3BsdmFkaWFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5NjE1MjksImV4cCI6MjEwOTUzNzUyOX0.DVVqAl6rk--HoJdz_DJ1U_bws558s6GAU4R1qll6NRw' }}" \
+            "https://mcoqubmqargcplvadiap.supabase.co/rest/v1/profiles?select=id&limit=1")
+          echo "HTTP $code"; test "$code" -lt 500

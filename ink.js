@@ -130,7 +130,7 @@ export class PageInk {
   pressure(e) { return e.pointerType === 'pen' ? (e.pressure > 0 ? e.pressure : 0.5) : 0.5; }
   down(e) {
     const h = this.host;
-    if (e.pointerType === 'pen') this.lastPen = Date.now();
+    if (e.pointerType === 'pen') { this.lastPen = Date.now(); h.penSeen && h.penSeen(); }
     const tool = h.tool();
     if (!h.canWrite() || tool.name === 'select' || tool.name === 'text') return;
     if (e.pointerType === 'touch' && (!h.fingerDraw() || Date.now() - this.lastPen < 700)) return;   // finger scrolls; palm ignored
@@ -168,6 +168,15 @@ export class PageInk {
     const obj = this.host.commitStroke(this.pageId, data);
     this.drawOne(obj);
   }
+  // A second finger landed: abandon the half-drawn stroke so it becomes a pinch/pan instead.
+  cancelStroke() {
+    if (!this.cur) return;
+    const c = this.cur; this.cur = null;
+    try { this.live.releasePointerCapture(this.pid); } catch (_) {}
+    const lctx = this.live.getContext('2d'); lctx.setTransform(1, 0, 0, 1, 0, 0); lctx.clearRect(0, 0, this.live.width, this.live.height);
+    if (c.erase && this.erased.length) { this.host.erase(this.erased.slice()); }
+    this.erased = [];
+  }
   eraseAt(q) {
     const r = 9, seen = new Set(this.erased);
     let hit = false;
@@ -191,8 +200,8 @@ export class PageInk {
 
 /* ═════════════ touch gestures: one finger pans, two fingers pinch-zoom ═════════════ */
 export class Gestures {
-  constructor(scroller, { getZoom, setZoom }) {
-    this.sc = scroller; this.getZoom = getZoom; this.setZoom = setZoom; this.ptrs = new Map(); this.g = null;
+  constructor(scroller, { getZoom, setZoom, onMulti }) {
+    this.sc = scroller; this.getZoom = getZoom; this.setZoom = setZoom; this.onMulti = onMulti; this.ptrs = new Map(); this.inkIds = new Set(); this.g = null;
     const on = (t, f) => scroller.addEventListener(t, f, { passive: false });
     on('pointerdown', e => this.down(e)); on('pointermove', e => this.move(e));
     on('pointerup', e => this.up(e)); on('pointercancel', e => this.up(e));
@@ -202,13 +211,16 @@ export class Gestures {
     }, { passive: false });
   }
   down(e) {
-    if (e.pointerType !== 'touch' || e.__ink) return;
-    this.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); this.begin();
+    if (e.pointerType !== 'touch' || e.__obj) return;   // dragging a photo/text object: not a page gesture
+    if (e.__ink) this.inkIds.add(e.pointerId);          // one finger is drawing: it must not pan
+    this.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (this.ptrs.size >= 2) { this.inkIds.clear(); this.onMulti && this.onMulti(); }
+    this.begin();
   }
   begin() {
     const a = [...this.ptrs.values()];
     this.g = a.length >= 2 ? { mode: 'pinch', d: Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y) || 1, z: this.getZoom(), cx: (a[0].x + a[1].x) / 2, cy: (a[0].y + a[1].y) / 2 }
-                           : { mode: 'pan' };
+                           : { mode: this.inkIds.size ? 'none' : 'pan' };
     this.last = this.center();
   }
   center() { const a = [...this.ptrs.values()]; return { x: a.reduce((s, p) => s + p.x, 0) / a.length, y: a.reduce((s, p) => s + p.y, 0) / a.length }; }
@@ -216,6 +228,7 @@ export class Gestures {
     if (!this.ptrs.has(e.pointerId)) return;
     this.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
     const c = this.center();
+    if (this.g.mode === 'none') { this.last = c; return; }
     if (this.g.mode === 'pan' || this.ptrs.size < 2) {
       this.sc.scrollLeft -= c.x - this.last.x; this.sc.scrollTop -= c.y - this.last.y;
     } else {
@@ -225,5 +238,5 @@ export class Gestures {
     }
     this.last = c;
   }
-  up(e) { if (this.ptrs.delete(e.pointerId) && this.ptrs.size) this.begin(); }
+  up(e) { this.inkIds.delete(e.pointerId); if (this.ptrs.delete(e.pointerId) && this.ptrs.size) this.begin(); }
 }

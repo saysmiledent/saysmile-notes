@@ -18,7 +18,7 @@ const S = {
   user: null, items: [], folderId: null, q: '', trash: false,
   note: null, role: 0, pages: [], objs: [], byId: new Map(), pageObjs: new Map(), pv: new Map(), authors: new Map(), members: [],
   tool: 'pen', cfg: { pen: { color: PEN_COLORS[0], wi: 1 }, hl: { color: HL_COLORS[0], wi: 1 }, text: { color: PEN_COLORS[0] } },
-  fingerDraw: false, zoom: 1, undo: [], redo: [], sel: null, filterAuthor: null, hl: null, asOf: 0, authorColors: false, drawer: false,
+  fingerDraw: initFinger(), zoom: 1, undo: [], redo: [], sel: null, filterAuthor: null, hl: null, asOf: 0, authorColors: false, drawer: false,
   sync: { pending: 0 }, curPage: null, unsub: null, io: null,
 };
 const canWrite = () => S.role >= 2 && !S.asOf && !!S.user;
@@ -258,7 +258,7 @@ async function viewNote(id) {
 
   root.replaceChildren(h('div', { class: 'noteview' }, buildBar(), h('div', { class: 'stage' }, scroller, h('div', { id: 'asofbar', class: 'asofbar', hidden: true })), fileIn));
   scroller.dataset.tool = S.tool;
-  new Gestures(scroller, { getZoom: () => S.zoom, setZoom });
+  new Gestures(scroller, { getZoom: () => S.zoom, setZoom, onMulti: () => S.pv.forEach(pv => pv.ink.cancelStroke()) });
   scroller.addEventListener('scroll', () => { if (!S._raf) S._raf = requestAnimationFrame(() => { S._raf = 0; updateCurPage(); }); }, { passive: true });
   scroller.addEventListener('pointerdown', e => { if (!e.target.closest('.obj') && !e.target.closest('.selbar')) deselect(); });
 
@@ -281,12 +281,21 @@ function buildBar() {
         h('div', { class: 'seg' }, tools.map(([n, ic, label]) => h('button', { class: 'ib tool', 'data-tool': n, title: label, 'aria-label': label, onclick: () => setTool(n), html: icon(ic) }))),
         h('div', { class: 'seg', id: 'colors' }), h('div', { class: 'seg' }, h('button', { class: 'ib', id: 'sizebtn', title: t('size'), onclick: cycleSize }), h('button', { class: 'ib', id: 'photobtn', title: t('toolPhoto'), onclick: () => pickPhoto(null), html: icon('image') })),
         h('div', { class: 'seg' }, h('button', { class: 'ib', id: 'undobtn', title: t('undo'), onclick: undo, html: icon('undo') }), h('button', { class: 'ib', id: 'redobtn', title: t('redo'), onclick: redo, html: icon('redo') })),
-        h('label', { class: 'fing', title: t('fingerDrawHint') }, h('input', { type: 'checkbox', onchange: e => { S.fingerDraw = e.target.checked; } }), h('span', {}, t('fingerDraw'))),
+        h('button', { class: 'ib', id: 'fingbtn', title: t('fingerDrawHint'), 'aria-label': t('fingerDraw'), onclick: () => setFinger(!S.fingerDraw, true), html: icon('hand') }),
       ] : h('span', { class: 'pill warn' }, t('viewOnly')),
       h('div', { class: 'seg zoom' }, ib('minus', t('zoomOut'), () => setZoom(S.zoom / 1.2)), h('button', { class: 'ib zl', id: 'zlabel', title: t('fit'), onclick: () => setZoom(fitZoom()) }), ib('plus', t('zoomIn'), () => setZoom(S.zoom * 1.2))),
       canWrite() ? h('button', { class: 'btn small', onclick: () => showTemplatePicker(false), html: icon('plus', 16) + '<span>' + t('addPage') + '</span>' }) : null,
       h('div', { class: 'seg selbar', id: 'selbar', hidden: true })));
   return bar;
+}
+function initFinger() {
+  try { const v = localStorage.getItem('ss.finger'); if (v === '1' || v === '0') return v === '1'; } catch (_) {}
+  return Math.min(screen.width, screen.height) < 600;      // phones: no Pencil, so finger draws by default
+}
+function setFinger(on, say) {
+  S.fingerDraw = on;
+  try { localStorage.setItem('ss.finger', on ? '1' : '0'); } catch (_) {}
+  updateBars(); if (say) toast(on ? t('fingerOn') : t('fingerOff'));
 }
 function setTool(n) {
   if (!canWrite() && n !== 'select') return;
@@ -314,6 +323,7 @@ function updateBars() {
   if (sb) { const k = S.tool === 'hl' ? 'hl' : 'pen', w = (k === 'hl' ? HL_W : PEN_W)[S.cfg[k].wi]; const d = Math.min(18, Math.max(3, k === 'hl' ? w / 1.6 : w * 2.4)); sb.innerHTML = `<span class="sizedot" style="width:${d}px;height:${d}px"></span>`; sb.hidden = S.tool === 'select' || S.tool === 'eraser' || S.tool === 'text'; }
   const u = q('#undobtn'), r = q('#redobtn'); if (u) u.disabled = !S.undo.length || !canWrite(); if (r) r.disabled = !S.redo.length || !canWrite();
   const z = q('#zlabel'); if (z) z.textContent = Math.round(S.zoom * 100) + '%';
+  const fb = q('#fingbtn'); if (fb) fb.classList.toggle('on', S.fingerDraw);
   const pb = q('#photobtn'); if (pb) pb.disabled = !canWrite();
   const ab = q('#asofbar');
   if (ab) { ab.hidden = !S.asOf; if (S.asOf) ab.replaceChildren(h('span', {}, t('viewingVersion', fmtTime(new Date(S.asOf)))), h('button', { class: 'btn small primary', onclick: () => { S.asOf = 0; repaintAll(); } }, t('backToCurrent'))); }
@@ -342,7 +352,7 @@ function setZoom(z, cx, cy) {
 }
 function applyZoom() {
   const z = S.zoom;
-  S.pv.forEach(pv => { pv.box.style.width = PAGE_W * z + 'px'; pv.box.style.height = PAGE_H * z + 'px'; pv.head.style.width = PAGE_W * z + 'px'; pv.pg.style.transform = `scale(${z})`; });
+  S.pv.forEach(pv => { pv.box.style.width = PAGE_W * z + 'px'; pv.box.style.height = PAGE_H * z + 'px'; pv.head.style.width = PAGE_W * z + 'px'; pv.pg.style.transform = `scale(${z})`; pv.pg.style.setProperty('--inv', String(1 / z)); });
 }
 function updateCurPage() {
   const r = S.scroller.getBoundingClientRect(), mid = r.top + r.height / 2; let best = null, bd = 1e9;
@@ -354,6 +364,7 @@ const currentPV = () => S.pv.get(S.curPage) || [...S.pv.values()][0];
 /* ───────────── pages ───────────── */
 const inkHost = {
   tool: () => curTool(), canWrite: () => canWrite() && S.tool !== 'select', fingerDraw: () => S.fingerDraw,
+  penSeen: () => { if (S.fingerDraw && !S.penNoted) { S.penNoted = true; setFinger(false, true); } },
   strokes: pid => pageObjs(pid).filter(o => o.kind === 'stroke' && alive(o)),
   view: () => ({ colorOf: S.authorColors || S.filterAuthor ? o => authorColor(o.author_id) : null, filterAuthor: S.filterAuthor, hl: S.hl }),
   commitStroke(pid, data) { const o = newObj(pid, 'stroke', data); persist([o]); pushUndo({ alive: [o.id], dead: [] }); renderDrawerSoon(); return o; },
@@ -451,7 +462,7 @@ function styleObjNode(n, o) {
 }
 function objDown(e, pv, n) {
   if (S.tool !== 'select') return;
-  e.__ink = true; const o = S.byId.get(n.dataset.id); selectObj(o.id);
+  e.__obj = true; const o = S.byId.get(n.dataset.id); selectObj(o.id);
   if (!canWrite() || (e.pointerType === 'mouse' && e.button !== 0)) return;
   if (n.isContentEditable) return;
   e.preventDefault(); n.setPointerCapture(e.pointerId);
